@@ -398,15 +398,20 @@ module.exports.some = some;
  * 
  */
 
-function reduce(array, test, seed){
-    each(array, function(element, index, arr){
-        if(seed === undefined){
-            seed = array[0];
-        } else if(seed){
-            seed = test(seed, element, index);
+function reduce(array, test, seed) {
+    let prevResult;
+    if (seed !== undefined) {
+        prevResult = seed;
+        each(array, function(e, i, a) {
+            prevResult = test(prevResult, e, i, a);
+        });
+    } else {
+        prevResult = array[0];
+        for (let i = 1; i < array.length; i++) {
+            prevResult = test(prevResult, array[i], i, array);
         }
-    });
-    return seed;
+    }
+    return prevResult;
 }
 
 module.exports.reduce = reduce;
