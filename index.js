@@ -71,14 +71,16 @@ module.exports.identity = identity;
 module.exports.typeOf = typeOf;
 
 /**
- * first: Designed to determine if a given arguments are an array, a number and the
- * first occurence of the number as an element in the given array. 
+ * first: Design to return the elements in the array based on the given number. 
  * 
- * @param {Array} array: The list to loop through to find the number.
+ * @param {Array} array: The list to loop through to find the given number of elements.
  * 
- * @param {Number} number: The number to search for in the given array.
+ * @param {Number} number: The number of elements to return in the given array.
  * 
- * @return {Value}: The first element of the given array, the array, or first occurence of the given number.
+ * @return {Value}: Return the first element of the given array if the given number
+ * is undefined or not a number, return the an empty array if the given array is not an array,
+ * Return the first given number of items of the given array.
+ * 
  */
  
  function first(array, number){
@@ -161,6 +163,9 @@ module.exports.indexOf = indexOf;
  */
  
 function contains(array, value) {
+    if (value === undefined){
+        return 0;
+    }
     return array.includes(value) ? true : false;
 }
 
@@ -190,11 +195,12 @@ module.exports.unique = unique;
 
 /**
  * filter: Designed to loop over a collection and return a new array with all the
- * true elements.
+ * passed in collection's elements that returned true.
  * 
- *@param {Array}array: The collection to search through.
+ *@param {Array}array: The collection to be checked and searched.
  * 
- * @param {Function}test: The function to run on each value in the collection.
+ * @param {Function}test: The function/callback function will check the collection for truthy elements pushing 
+ * each into a new array. This function as a parameter will execute its code inside the filter function.
  * 
  * @return {Array}: Returns a new array of elements that the came back as true
  * once the test is ran. 
@@ -215,13 +221,14 @@ module.exports.filter = filter;
 
 
 /**
-*reject: Designed to loop through a collection and create a new array with all the
-* elements that are not in the given array. 
+*reject: Designed to loop over a collection and return a new array with all the
+ * passed in collection's elements that returned false. 
 * 
 * @param {Array}array: The collection to iterate through.
 * 
-* @param {Function}test: The function will perform the action of determining if
-* the given array contains an element. 
+* @param {Function}test: The function/callback function will check the collection for falsy elements pushing 
+ * each into a new array. This function as a parameter will execute its code inside the reject function inside
+ * the filter function.
 * 
 * @return {Array}: Returns new array with all the element that were not in the 
 * given array.
@@ -247,8 +254,9 @@ module.exports.reject= reject;
  * 
  * @param {Array}array: Collection to be looped through for elements.
  * 
- * @param {Function}test: The process of determining what elements are and are 
- * not inside of the given array and then places them new separate arrays.
+ * @param {Function}test: The function/callback function will check the collection for falsy elements using the reject function pushing
+ * each into a new array while also checking the collection for truthy elements using the filter function and pushing those into another new array.
+ * The test or callback function will then return a new array that includes both formerly created arrays.
  * 
  * @return {Array}: Returns a new array with both of the arrays inside.
  * 
@@ -281,7 +289,9 @@ module.exports.partition = partition;
  * @param {Array or Object}collection: The array or object to loop through.
  * 
  * @param {Function}test: The test to be applied to each element or value in the
- * collection.
+ * collection. At the function call whether the given collection is an object or array is 
+ * determined. If it is an object the object's key values pairs are pushed into an array. 
+ * If it is an array its elements are pushed into an array. 
  * 
  * @return {Array}: Returns a new array with the looped elements.
 */
@@ -304,7 +314,7 @@ module.exports.map = map;
  * @param {Array}arrayofobjects: The given array that contain objects as element
  *to iterate over. 
  * 
- * @param {Property}objectkey: The given key of each iterated element.
+ * @param {String}objectkey: The given key of each iterated element.
  * 
  * @return {Array}: Returns a new array of properties from the iterated element.
 */
@@ -327,7 +337,8 @@ module.exports.pluck = pluck;
  * 
  * @return {Boolean}: Returns a boolean value of false if at least one of the 
  * elements in the collection return false. Returns a boolean value of true if 
- * every value in the collection returns true.
+ * every value in the collection returns true. Edgecase: If no function is given the collection's
+ * element will be pushed into the new array.
  */
  
 function every(collection, test){
@@ -360,7 +371,8 @@ module.exports.every = every;
  * 
  * @return {Boolean}: Return true or false based on what conditions are met.
  * Returns true if the collection length is greater than 0 else returns false
- * (edgecase).
+ * (edgecase). Edgecase: If no function is given and the element exist it will be pushed
+ * into the new array.
  */
  
  function some(collection, test) {
@@ -385,7 +397,8 @@ module.exports.every = every;
 module.exports.some = some;
 
 /**
- * reduce: Designed to loop through an collection and returning a value.
+ * reduce: Designed to call a function for every element. It iterates through 
+ * each element in the collection returning the final return value of the function call.
  * 
  * @param {Array} array: The list to loop through.
  * 
@@ -399,25 +412,25 @@ module.exports.some = some;
  */
 
 function reduce(array, test, seed) {
-    let prevResult;
-    if (seed !== undefined) {
-        prevResult = seed;
-        each(array, function(e, i, a) {
-            prevResult = test(prevResult, e, i, a);
-        });
+    let previousResult = seed;
+    if (seed === undefined) {
+        previousResult = array[0];
+    for(let i = 1; i <= array.length - 1; i++) {
+        previousResult = test(previousResult, array[i], i);
+    }
     } else {
-        prevResult = array[0];
-        for (let i = 1; i < array.length; i++) {
-            prevResult = test(prevResult, array[i], i, array);
+      for(let i = 0; i <= array.length - 1; i++) {
+        previousResult = test(previousResult, array[i], i);
         }
     }
-    return prevResult;
+    return previousResult;
 }
+
 
 module.exports.reduce = reduce;
 
 /**
-*extend: Designed to copy properties of objects into another.
+*extend: Designed to copy properties of any amount of given objects into the first given object.
 *
 * @param {Object} obj: Target object to be added to.
 * 
@@ -426,7 +439,7 @@ module.exports.reduce = reduce;
 * @param {Spread Parameter of Objects} newArgs: Possible source objects to be 
 * combined with the first given object.
 * 
-* @return {Object}: Returns the updated object. 
+* @return {Object}: Returns the first object updated with the properties of the other given objects. 
 *
 */
 
