@@ -329,17 +329,17 @@ return map(arrayofobjects, function(element, index, collection){
 module.exports.pluck = pluck;
 
 /**
- *every: Designed to loop an collection until a false element is found.
+ *every: Design to call the function for every element of the given collection.
  * 
- * @param {Array or Object} collection: The array to iterate through.
+ * @param {Array or Object} collection: The collection to iterate through
  * 
  * @param {Function} test: The function to apply to each element.
  * 
- * @return {Boolean}: Returns a boolean value of false if at least one of the 
- * elements in the collection return false. Returns a boolean value of true if 
- * every value in the collection returns true. Edgecase: If test is not a function or an element 
- * in the collection push the element into the new array. If no callback function is given push the 
- * element in to the new array.
+ * @return {Boolean}: Call the function for every element of the given collection with its
+ * currrent element, index and collection if it is an array or with its current value, key and collection
+ * if it's an object. Returns a boolean value of true if every test evaluates to true.
+ * If even one returns false return false. If no function is provided return if every element is true. 
+ * If the function is not given and and not an element push the element into the array.
  */
  
 function every(collection, test){
@@ -371,11 +371,11 @@ module.exports.every = every;
  * @param {Function} test: The function to apply to the elements or keys in the 
  * given collection.
  * 
- * @return {Boolean}: If
- * the given test is not a function and if the value exist in the collection push
- * the value into the new array. Else if the callback function exist push the value
- * into the new array. Return true if the array length is greater than zero otherwise
- * return false.
+ * @return {Boolean}: Call the function and if the collection is an array or object. 
+ * Access it's current value. Ifthe return value of the calling function is true for
+ * at least one element return true. If it is false for all elements return false.
+ * If the function is not provided return true if at least one element is true
+ * otherwise return false. If the function is not given push the value into the new array.
  */
  
  function some(collection, test) {
