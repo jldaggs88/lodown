@@ -338,8 +338,7 @@ module.exports.pluck = pluck;
  * @return {Boolean}: Call the function for every element of the given collection with its
  * currrent element, index and collection if it is an array or with its current value, key and collection
  * if it's an object. Returns a boolean value of true if every test evaluates to true.
- * If even one returns false return false. If no function is provided return if every element is true. 
- * If the function is not given and and not an element push the element into the array.
+ * If even one returns false return false. If no function is provided return if every element is true. Return false therwise.
  */
  
 function every(collection, test){
@@ -371,11 +370,11 @@ module.exports.every = every;
  * @param {Function} test: The function to apply to the elements or keys in the 
  * given collection.
  * 
- * @return {Boolean}: Call the function and if the collection is an array or object. 
- * Access it's current value. Ifthe return value of the calling function is true for
+ * @return {Boolean}: Call the function and if test the collection is an array or object. 
+ * Access it's current value. If the return value of the calling function is true for
  * at least one element return true. If it is false for all elements return false.
  * If the function is not provided return true if at least one element is true
- * otherwise return false. If the function is not given push the value into the new array.
+ * otherwise return false.
  */
  
  function some(collection, test) {
