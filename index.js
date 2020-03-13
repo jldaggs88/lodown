@@ -337,16 +337,18 @@ module.exports.pluck = pluck;
  * 
  * @return {Boolean}: Returns a boolean value of false if at least one of the 
  * elements in the collection return false. Returns a boolean value of true if 
- * every value in the collection returns true. Edgecase: If no function is given the collection's
- * element will be pushed into the new array.
+ * every value in the collection returns true. Edgecase: If test is not a function or an element 
+ * in the collection push the element into the new array. If no callback function is given push the 
+ * element in to the new array.
  */
  
 function every(collection, test){
     var ourArray = [];
-      each(collection,function(element, index, collection){
+      each(collection, function(element, index, collection){
          if(typeof test !== "function"){
              if(!element){
-            ourArray.push(element);}
+            ourArray.push(element);
+             }
          }
         else if(!test(element, index, collection)){
             ourArray.push(element);
@@ -369,10 +371,11 @@ module.exports.every = every;
  * @param {Function} test: The function to apply to the elements or keys in the 
  * given collection.
  * 
- * @return {Boolean}: Return true or false based on what conditions are met.
- * Returns true if the collection length is greater than 0 else returns false
- * (edgecase). Edgecase: If no function is given and the element exist it will be pushed
- * into the new array.
+ * @return {Boolean}: If
+ * the given test is not a function and if the value exist in the collection push
+ * the value into the new array. Else if the callback function exist push the value
+ * into the new array. Return true if the array length is greater than zero otherwise
+ * return false.
  */
  
  function some(collection, test) {
@@ -384,8 +387,6 @@ module.exports.every = every;
              }
         } else if (test(value, index, collection)) {
              ourArray.push(value);
-        } else if(test(value, index, collection)){
-            ourArray.push(value);
         }
     });
         if(ourArray.length > 0){
